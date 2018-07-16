@@ -2,6 +2,7 @@
   <div class="team__header">
     <el-row>
       <img v-if="teamData" :src="`/team_logos/${teamData.tricode}.svg`" :alt="`${teamData.fullName} logo`" class="team__header__logo">
+      <h1>{{teamData.fullName}}</h1>
     </el-row>
     <el-row v-if="thisYearStats" type="flex" justify="center" class="team__header__this-year-stats">
       <el-col :sm="10">

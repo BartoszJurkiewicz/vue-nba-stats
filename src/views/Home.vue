@@ -1,8 +1,15 @@
 <template>
   <el-container class="home">
     <el-main>
-      <list type="team">
-        <list-item v-for="team in teams" :key="team.teamId" :router-to="`/team/${team.teamId}`" :width="6">
+      <el-form>
+        <el-select v-model="conference" @change="val => activeList = val === 'all' ? val : 'filtered'">
+          <el-option value="all" label="All"></el-option>
+          <el-option value="East" label="East"></el-option>
+          <el-option value="West" label="West"></el-option>
+        </el-select>
+      </el-form>
+      <list type="team" v-if="all">
+        <list-item v-for="team in this[activeList]" :key="team.teamId" :router-to="`/team/${team.teamId}`" :width="6">
           <template slot="photo">
             <img :src="`/team_logos/${team.tricode}.svg`" :alt="`${team.fullName} logo`">
           </template>
@@ -22,13 +29,22 @@ import ListItem from '@/components/ListItem'
 export default {
   name: 'home',
   components: { List, ListItem },
+  data () {
+    return {
+      conference: 'all',
+      activeList: 'all'
+    }
+  },
   computed: {
     ...mapGetters({
-      teams: 'teamsModule/_getNbaTeams'
-    })
+      all: 'teamsModule/_getNbaTeams'
+    }),
+    filtered () {
+      return this.all.filter(team => team.confName === this.conference)
+    }
   },
   created () {
-    if (this.teams.length === 0) this.$store.dispatch('teamsModule/getTeams')
+    if (this.all.length === 0) this.$store.dispatch('teamsModule/getTeams')
   }
 }
 </script>
