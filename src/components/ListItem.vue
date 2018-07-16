@@ -1,5 +1,5 @@
 <template>
-  <el-col :sm="6" class="list__item">
+  <el-col :sm="width" class="list__item">
     <router-link :to="routerTo">
       <el-card>
         <slot name="photo" />
@@ -20,7 +20,7 @@
 <script>
 export default {
   name: 'listItem',
-  props: [ 'routerTo', 'teamTricode' ]
+  props: [ 'routerTo', 'width' ]
 }
 </script>
 

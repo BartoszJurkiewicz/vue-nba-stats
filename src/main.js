@@ -5,7 +5,7 @@ import router from './router'
 import store from './store/'
 import './registerServiceWorker'
 
-import { Row, Col, Card, Tooltip } from 'element-ui'
+import { Container, Header, Main, Footer, Row, Col, Card, Tooltip, Loading } from 'element-ui'
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -15,10 +15,15 @@ Vue.config.productionTip = false
 const unsync = sync(store, router)
 
 locale.use(lang)
+Vue.use(Container)
+Vue.use(Header)
+Vue.use(Main)
+Vue.use(Footer)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Card)
 Vue.use(Tooltip)
+Vue.use(Loading)
 
 new Vue({
   router,

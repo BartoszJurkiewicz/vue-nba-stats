@@ -1,43 +1,32 @@
 <template>
-  <div class="team">
-      <header>
-        <img v-if="teamData" :src="`/team_logos/${teamData.tricode}.svg`" :alt="`${teamData.fullName} logo`">
-        <template v-if="thisYearStats">
-          <p>Season: {{thisYearStats[3]}}</p>
-          <p>Wins: {{thisYearStats[5]}}</p>
-          <p>Losses: {{thisYearStats[6]}}</p>
-        </template>
-        <template v-if="regularSeasonStats">
-          <el-tooltip effect="dark" content="Assists per game">
-            <p>
-              APG: {{regularSeasonStats.apg.avg}}
-            </p>
-          </el-tooltip>
-          <el-tooltip effect="dark" content="Blocks per game">
-            <p>BPG: {{regularSeasonStats.bpg.avg}}</p>
-          </el-tooltip>
-          <el-tooltip effect="dark" content="Points per game">
-            <p>PPG: {{regularSeasonStats.ppg.avg}}</p>
-          </el-tooltip>
-          <el-tooltip effect="dark" content="Opponent points per game">
-            <p>OPPG: {{regularSeasonStats.oppg.avg}}</p>
-          </el-tooltip>
-          <el-tooltip effect="dark" content="Steals per game">
-            <p>SPG: {{regularSeasonStats.spg.avg}}</p>
-          </el-tooltip>
-        </template>
-      </header>
-      
-  </div>
+  <el-container class="team">
+    <el-main>
+      <team-stats-header :team-data="teamData" :this-year-stats="thisYearStats" :regular-season-stats="regularSeasonStats" />
+      <list v-if="teamPlayers.length > 0">
+        <list-item v-for="player in teamPlayers" :key="player.personId" :router-to="`/player/${player.personId}`" :width="4">
+          <template slot="photo">
+            <img :src="`//ak-static.cms.nba.com/wp-content/uploads/headshots/nba/latest/260x190/${player.personId}.png`" :alt="`${player.displayName} photo`">
+          </template>
+          <template slot="header">{{player.displayName}}</template>
+          <template slot="description">{{player.posExpanded}}</template>
+          <template slot="footer">{{player.heightFeet}}'{{player.heightInches}} | {{player.weightPounds}}</template>
+        </list-item>
+      </list>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import store from '@/store/'
+import TeamStatsHeader from '@/components/TeamStatsHeader'
+import List from '@/components/List'
+import ListItem from '@/components/ListItem'
 
 export default {
   name: 'team',
   props: [ 'teamID' ],
+  components: { TeamStatsHeader, List, ListItem },
   computed: {
     teamData () {
       return this.$store.getters['teamsModule/_getTeamData'](this.teamID)
@@ -53,22 +42,29 @@ export default {
     },
     playoffsStats () {
       return this.$store.getters['teamsModule/_getTeamPlayoffsStats'](this.teamID)
+    },
+    teamPlayers () {
+      return (this.teamData) ? this.$store.getters['playersModule/_getTeamPlayers'](this.teamData.tricode) : []
     }
   },
   async beforeRouteEnter (to, from, next) {
+    store.commit('SET_LOADER', true)
     await store.dispatch('teamModule/getTeamYBYStats', {teamId: to.params.id, seasonType: 'Playoffs'})
     next()
+    store.commit('SET_LOADER', false)
   },
   methods: {
     ...mapActions({
       getTeams: 'teamsModule/getTeams',
       getTeamsStats: 'teamsModule/getTeamsStats',
-      getTeamYBYStats: 'teamModule/getTeamYBYStats'
+      getTeamYBYStats: 'teamModule/getTeamYBYStats',
+      getPlayers: 'playersModule/getPlayers'
     })
   },
   created () {
     if (!this.teamData) this.getTeams()
     if (!this.regularSeasonStats) this.getTeamsStats()
+    if (this.teamPlayers.length === 0) this.getPlayers()
   }
 }
 </script>
