@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-import About from './views/About.vue'
+import Home from '@/views/Home.vue'
 
 Vue.use(Router)
 
@@ -13,9 +12,10 @@ export default new Router({
       component: Home
     },
     {
-      path: '/about',
-      name: 'about',
-      component: About
+      path: '/team/:id',
+      name: 'team',
+      component: () => import('@/views/Team'),
+      props: route => ({teamID: route.params.id})
     }
   ]
 })

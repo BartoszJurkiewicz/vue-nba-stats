@@ -1,16 +1,19 @@
 <template>
   <div class="home">
+    <list :items="teams" type="team" />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
+import List from '@/components/List'
 
 export default {
   name: 'home',
+  components: { List },
   computed: {
-    ...mapState({
-      teams: state => state.teamsModule.teams
+    ...mapGetters({
+      teams: 'teamsModule/_getNbaTeams'
     })
   },
   created () {

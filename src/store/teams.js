@@ -22,5 +22,13 @@ export default {
 
       }
     }
+  },
+  getters: {
+    _getNbaTeams: state => {
+      return state.teams.filter(team => team.isNBAFranchise)
+    },
+    _getTeamById: state => id => {
+      return state.teams.find(team => team.teamId === id)
+    }
   }
 }
