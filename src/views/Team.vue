@@ -9,7 +9,7 @@
           </template>
           <template slot="header">{{player.displayName}}</template>
           <template slot="description">{{player.posExpanded}}</template>
-          <template slot="footer">{{player.heightFeet}}'{{player.heightInches}} | {{player.weightPounds}}</template>
+          <template slot="footer">{{player.heightFeet}}'{{player.heightInches}} | {{player.weightPounds}} lbs</template>
         </list-item>
       </list>
     </el-main>

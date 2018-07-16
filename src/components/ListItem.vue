@@ -1,7 +1,7 @@
 <template>
   <el-col :sm="width" class="list__item">
     <router-link :to="routerTo">
-      <el-card>
+      <el-card shadow="hover">
         <slot name="photo" />
         <header>
           <slot name="header" />

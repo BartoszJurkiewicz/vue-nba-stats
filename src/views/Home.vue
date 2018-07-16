@@ -1,12 +1,14 @@
 <template>
   <el-container class="home">
     <el-main>
-      <el-form>
-        <el-select v-model="conference" @change="val => activeList = val === 'all' ? val : 'filtered'">
-          <el-option value="all" label="All"></el-option>
-          <el-option value="East" label="East"></el-option>
-          <el-option value="West" label="West"></el-option>
-        </el-select>
+      <el-form label-position="top">
+        <el-form-item label="Conference">
+          <el-select v-model="conference" @change="val => activeList = val === 'all' ? val : 'filtered'">
+            <el-option value="all" label="All"></el-option>
+            <el-option value="East" label="East"></el-option>
+            <el-option value="West" label="West"></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <list type="team" v-if="all">
         <list-item v-for="team in this[activeList]" :key="team.teamId" :router-to="`/team/${team.teamId}`" :width="6">
@@ -31,6 +33,7 @@ export default {
   components: { List, ListItem },
   data () {
     return {
+      sort: '',
       conference: 'all',
       activeList: 'all'
     }

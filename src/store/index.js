@@ -13,7 +13,6 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_LOADER: (state, bool) => {
-      console.log('toggling loader', bool)
       state.isLoading = bool
     }
   },
