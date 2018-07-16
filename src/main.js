@@ -5,7 +5,7 @@ import router from './router'
 import store from './store/'
 import './registerServiceWorker'
 
-import { Row, Col, Card } from 'element-ui'
+import { Row, Col, Card, Tooltip } from 'element-ui'
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -18,6 +18,7 @@ locale.use(lang)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Card)
+Vue.use(Tooltip)
 
 new Vue({
   router,

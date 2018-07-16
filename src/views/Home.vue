@@ -17,7 +17,7 @@ export default {
     })
   },
   created () {
-    this.$store.dispatch('teamsModule/getTeams')
+    if (this.teams.length === 0) this.$store.dispatch('teamsModule/getTeams')
   }
 }
 </script>
