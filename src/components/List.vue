@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="20" class="list">
+  <el-row class="list-container" type="flex" :gutter="20">
     <slot />
   </el-row>
 </template>
@@ -11,3 +11,9 @@ export default {
   name: 'list'
 }
 </script>
+
+<style lang="scss" scoped>
+.list-container {
+  flex-wrap: wrap;
+}
+</style>

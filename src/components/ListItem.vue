@@ -2,9 +2,11 @@
   <el-col :sm="width" class="list__item">
     <router-link :to="routerTo">
       <el-card shadow="hover">
-        <slot name="photo" />
         <header>
-          <slot name="header" />
+          <slot name="photo" />
+          <p>
+            <slot name="header" />
+          </p>
         </header>
         <p>
           <slot name="description" />

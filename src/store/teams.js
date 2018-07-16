@@ -5,7 +5,7 @@ export default {
   namespaced: true,
   state: {
     teams: [],
-    stats: []
+    stats: {}
   },
   mutations: {
     SET_TEAMS: (state, teams) => {
@@ -46,6 +46,7 @@ export default {
       }
       return false
     },
+    _getRegularSeasonStats: state => state.stats.regularSeason,
     _getTeamPlayoffsStats: state => teamID => {
       let stats = []
       state.stats.playoffs.series.forEach(s => {

@@ -14,6 +14,11 @@
 }
 a {
   text-decoration: none;
+  color: inherit;
+}
+ul {
+  padding: 0;
+  list-style-type: none;
 }
 .text-left {
   text-align: left;
