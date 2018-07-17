@@ -1,5 +1,5 @@
 <template>
-  <div class="team__header">
+  <div class="team__stats-header" ref="regStats">
     <el-row v-if="teamData">
       <img :src="`/team_logos/${teamData.tricode}.svg`" :alt="`${teamData.fullName} logo`" class="team__header__logo">
       <h1>{{teamData.fullName}}</h1>
@@ -85,15 +85,18 @@ export default {
       type: Object,
       required: true
     }
+  },
+  mounted () {
+    this.$emit('canObserve', this.$refs.regStats)
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.team__header__this-year-stats {
+.team__stats-header__this-year-stats {
   margin: 1rem 0;
 }
-.team__header__regular-season-stats {
+.team__stats-header__regular-season-stats {
   margin-bottom: 2rem;
 }
 </style>

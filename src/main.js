@@ -5,7 +5,7 @@ import router from './router'
 import store from './store/'
 import './registerServiceWorker'
 
-import { Container, Header, Main, Footer, Row, Col, Card, Tooltip, Loading, Form, FormItem, Select, Option } from 'element-ui'
+import { Container, Header, Main, Footer, Row, Col, Card, Tooltip, Loading, Form, FormItem, Select, Option, Menu, MenuItem } from 'element-ui'
 import lang from 'element-ui/lib/locale/lang/en'
 import locale from 'element-ui/lib/locale'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -28,6 +28,8 @@ Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Select)
 Vue.use(Option)
+Vue.use(Menu)
+Vue.use(MenuItem)
 
 new Vue({
   router,

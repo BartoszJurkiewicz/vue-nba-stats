@@ -45,12 +45,7 @@ export default {
   getters: {
     _getNbaTeams: state => state.teams.filter(team => team.isNBAFranchise),
     _getTeamData: state => teamID => state.teams.find(team => team.teamId === teamID),
-    _getTeamPreOrRegSeasonStats: state => getData => {
-      if (state.teamsStats[getData.seasonType]) {
-        return state.teamsStats[getData.seasonType].teams.find(team => team.teamId === getData.teamID)
-      }
-      return false
-    },
+    _getTeamPreOrRegSeasonStats: state => getData => state.teamsStats[getData.seasonType].teams.find(team => team.teamId === getData.teamID),
     _getRegularSeasonStats: state => state.teamsStats.regularSeason.teams,
     _getTeamPlayoffsStats: state => teamID => {
       let stats = []

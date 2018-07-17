@@ -1,5 +1,5 @@
 <template>
-  <el-col :sm="width" class="list__item">
+  <el-col :sm="width + 2" :md="width" :xl="width - 2" class="list__item">
     <router-link :to="routerTo">
       <el-card shadow="hover">
         <header>

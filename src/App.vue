@@ -58,6 +58,9 @@ ul {
   padding: 0;
   list-style-type: none;
 }
+img {
+  max-width: 100%
+}
 .el-card {
   height: 100%;
 }
