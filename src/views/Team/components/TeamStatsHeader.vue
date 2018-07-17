@@ -1,5 +1,5 @@
 <template>
-  <div class="team__stats-header" ref="regStats">
+  <div class="team__stats-header" ref="info">
     <el-row v-if="teamData">
       <img :src="`/team_logos/${teamData.tricode}.svg`" :alt="`${teamData.fullName} logo`" class="team__header__logo">
       <h1>{{teamData.fullName}}</h1>
@@ -87,7 +87,7 @@ export default {
     }
   },
   mounted () {
-    this.$emit('canObserve', {el: this.$refs.regStats, name: 'regStats'})
+    this.$emit('canObserve', {el: this.$refs.info, name: 'info'})
   }
 }
 </script>
