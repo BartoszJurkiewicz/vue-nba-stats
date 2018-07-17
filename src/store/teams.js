@@ -5,14 +5,19 @@ export default {
   namespaced: true,
   state: {
     teams: [],
-    stats: {}
+    teamsStats: {
+      regularSeason: {
+        teams: []
+      }
+    },
+    homeStats: []
   },
   mutations: {
     SET_TEAMS: (state, teams) => {
       Vue.set(state, 'teams', teams)
     },
     SET_TEAMS_STATS: (state, stats) => {
-      Vue.set(state, 'stats', stats)
+      Vue.set(state, 'teamsStats', stats)
     }
   },
   actions: {
@@ -21,7 +26,6 @@ export default {
         const res = await axios.get('https://data.nba.net/prod/v1/2018/teams.json')
         const teams = res.data.league.standard
         commit('SET_TEAMS', teams)
-        commit('SET_LOADER', false, {root: true})
         return teams
       } catch (err) {
 
@@ -31,6 +35,7 @@ export default {
       try {
         const res = await axios.get('https://data.nba.net/prod/v1/2017/team_stats_rankings.json')
         commit('SET_TEAMS_STATS', res.data.league.standard)
+        commit('SET_LOADER', false, {root: true})
         return res.data.league.standard
       } catch (err) {
 
@@ -41,15 +46,15 @@ export default {
     _getNbaTeams: state => state.teams.filter(team => team.isNBAFranchise),
     _getTeamData: state => teamID => state.teams.find(team => team.teamId === teamID),
     _getTeamPreOrRegSeasonStats: state => getData => {
-      if (state.stats[getData.seasonType]) {
-        return state.stats[getData.seasonType].teams.find(team => team.teamId === getData.teamID)
+      if (state.teamsStats[getData.seasonType]) {
+        return state.teamsStats[getData.seasonType].teams.find(team => team.teamId === getData.teamID)
       }
       return false
     },
-    _getRegularSeasonStats: state => state.stats.regularSeason,
+    _getRegularSeasonStats: state => state.teamsStats.regularSeason.teams,
     _getTeamPlayoffsStats: state => teamID => {
       let stats = []
-      state.stats.playoffs.series.forEach(s => {
+      state.teamsStats.playoffs.series.forEach(s => {
         if (s.teams.find(team => team.teamId === teamID)) stats.push(s.teams.filter(team => team.teamId === teamID)[0])
       })
       return stats

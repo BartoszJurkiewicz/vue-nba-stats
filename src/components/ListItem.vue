@@ -22,7 +22,16 @@
 <script>
 export default {
   name: 'listItem',
-  props: [ 'routerTo', 'width' ]
+  props: {
+    'routerTo': {
+      type: String,
+      required: true
+    },
+    'width': {
+      type: Number,
+      default: 6
+    }
+  }
 }
 </script>
 

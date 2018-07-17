@@ -72,7 +72,20 @@
 <script>
 export default {
   name: 'teamStatsHeader',
-  props: [ 'teamData', 'thisYearStats', 'regularSeasonStats' ]
+  props: {
+    'teamData': {
+      type: Object,
+      required: true
+    },
+    'thisYearStats': {
+      type: Array,
+      required: true
+    },
+    'regularSeasonStats': {
+      type: Object,
+      required: true
+    }
+  }
 }
 </script>
 

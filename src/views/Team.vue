@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import store from '@/store/'
 import TeamStatsHeader from '@/components/TeamStatsHeader'
 import List from '@/components/List'
@@ -28,14 +28,14 @@ export default {
   props: [ 'teamID' ],
   components: { TeamStatsHeader, List, ListItem },
   computed: {
+    ...mapState('teamModule', {
+      YBYStats: 'YBYStats',
+    }),
+    ...mapGetters({
+      thisYearStats: 'teamModule/_getThisYearStats'
+    }),
     teamData () {
       return this.$store.getters['teamsModule/_getTeamData'](this.teamID)
-    },
-    YBYStats () {
-      return this.$store.state.teamModule.YBYStats
-    },
-    thisYearStats () {
-      return this.$store.state.teamModule.YBYStats.rowSet.reverse()[0]
     },
     regularSeasonStats () {
       return this.$store.getters['teamsModule/_getTeamPreOrRegSeasonStats']({seasonType: 'regularSeason', teamID: this.teamID})

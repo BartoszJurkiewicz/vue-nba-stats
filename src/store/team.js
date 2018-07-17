@@ -23,5 +23,8 @@ export default {
 
       }
     }
+  },
+  getters: {
+    _getThisYearStats: state => state.YBYStats.rowSet.reverse()[0]
   }
 }
