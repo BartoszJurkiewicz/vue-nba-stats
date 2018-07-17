@@ -25,7 +25,7 @@ export default {
   },
   components: { List, ListItem },
   mounted () {
-    this.$emit('canObserve', this.$refs.team.$el)
+    this.$emit('canObserve', {el: this.$refs.team.$el, name: 'team'})
   }
 }
 </script>

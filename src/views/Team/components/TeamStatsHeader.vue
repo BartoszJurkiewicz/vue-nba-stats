@@ -87,7 +87,7 @@ export default {
     }
   },
   mounted () {
-    this.$emit('canObserve', this.$refs.regStats)
+    this.$emit('canObserve', {el: this.$refs.regStats, name: 'regStats'})
   }
 }
 </script>

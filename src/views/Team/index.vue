@@ -1,9 +1,9 @@
 <template>
-  <el-container class="team" ref="container">
+  <el-container class="team" ref="container" @scroll="handleScroll">
     <el-row type="flex" justify="center">
       <el-col :lg="18">
         <el-header class="team__header">
-          <el-menu :default-active="activeSection" mode="horizontal">
+          <el-menu :default-active="activeSection" mode="horizontal" @select="changeActiveSection">
             <el-menu-item index="regStats">Regular season statistics</el-menu-item>
             <el-menu-item index="team">Team</el-menu-item>
             <el-menu-item index="ybyStats">Year by year statistics</el-menu-item>
@@ -33,7 +33,8 @@ export default {
   components: { TeamStatsHeader, TeamPlayers },
   data () {
     return {
-      activeSection: "regStats"
+      activeSection: "regStats",
+      sectionOffsets: []
     }
   },
   computed: {
@@ -68,12 +69,32 @@ export default {
       getTeamsStats: 'teamsModule/getTeamsStats',
       getTeamYBYStats: 'teamModule/getTeamYBYStats',
       getPlayers: 'playersModule/getPlayers'
-    })
+    }),
+    observe (elData) {
+      this.sectionOffsets.push({name: elData.name, offset: elData.el.offsetTop})
+      this.sectionOffsets = this.sectionOffsets.sort((a, b) => a.offset - b.offset).reverse()
+    },
+    handleScroll (e) {
+      let activeSection = this.sectionOffsets.find(el => el.offset <= window.pageYOffset + 100)
+      this.activeSection = activeSection.name
+    },
+    changeActiveSection (sectionName) {
+      this.activeSection = sectionName
+      const section = this.sectionOffsets.find(el => el.name === sectionName)
+      window.scroll({
+        top: section.offset - 80,
+        behavior: 'smooth'
+      })
+    }
   },
   created () {
+    window.addEventListener('scroll', this.handleScroll)
     if (!this.teamData) this.getTeams()
     if (!this.regularSeasonStats) this.getTeamsStats()
     if (this.teamPlayers.length === 0) this.getPlayers()
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.handleScroll)
   }
 }
 </script>
@@ -87,6 +108,6 @@ export default {
   z-index: 2;
 }
 .team__main-container {
-  padding-top: 6rem;
+  padding-top: 4rem;
 }
 </style>
