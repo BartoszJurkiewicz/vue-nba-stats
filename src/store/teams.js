@@ -35,7 +35,6 @@ export default {
       try {
         const res = await axios.get('https://data.nba.net/prod/v1/2017/team_stats_rankings.json')
         commit('SET_TEAMS_STATS', res.data.league.standard)
-        commit('SET_LOADER', false, {root: true})
         return res.data.league.standard
       } catch (err) {
 

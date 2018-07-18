@@ -15,8 +15,8 @@
 
           <team-players v-if="teamPlayers.length > 0" :team-players="teamPlayers" @canObserve="pushOffsetData" />
 
-          <stats-chart :stats="YBYStats" :keys="['5', '6']" />
-          
+          <team-statistics :stats="YBYStats" @canObserve="pushOffsetData" />
+
         </el-main>
       </el-col>
     </el-row>
@@ -28,16 +28,17 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import store from '@/store/'
 import TeamStatsHeader from './components/TeamStatsHeader'
 import TeamPlayers from './components/TeamPlayers'
-import StatsChart from './components/StatsChart'
+import TeamStatistics from './components/TeamStatistics'
 
 export default {
   name: 'team',
   props: [ 'teamID' ],
-  components: { TeamStatsHeader, TeamPlayers, StatsChart },
+  components: { TeamStatsHeader, TeamPlayers, TeamStatistics },
   data () {
     return {
       activeSection: "info",
-      sectionOffsets: []
+      sectionOffsets: [],
+      activeStats: 'wl'
     }
   },
   computed: {
