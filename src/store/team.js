@@ -6,11 +6,23 @@ export default {
   state: {
     YBYStats: {
       rowSet: []
-    }
+    },
+    franchiseLeaders: [],
+    teamDetails: [],
+    commonTeamRoster: []
   },
   mutations: {
     SET_YBY_STATS: (state, stats) => {
       Vue.set(state, 'YBYStats', stats)
+    },
+    SET_FRANCHISE_LEADERS: (state, data) => {
+      Vue.set(state, 'franchiseLeaders', data)
+    },
+    SET_TEAM_DETAILS: (state, details) => {
+      Vue.set(state, 'teamDetails', details)
+    },
+    SET_COMMON_TEAM_ROSTER: (state, data) => {
+      Vue.set(state, 'commonTeamRoster', data)
     }
   },
   actions: {
@@ -22,6 +34,27 @@ export default {
       } catch (err) {
 
       }
+    },
+    async getFranchiseLeaders ({commit}, teamID) {
+      try {
+        const res = await axios.get(`https://stats.nba.com/stats/franchiseleaders?teamID=${teamID}`)
+        commit('SET_FRANCHISE_LEADERS', res.data.resultSets)
+        return res.data.resultSets
+      } catch (err) {}
+    },
+    async getTeamDetails ({commit}, teamID) {
+      try {
+        const res = await axios.get(`https://stats.nba.com/stats/teamDetails?teamID=${teamID}`)
+        commit('SET_TEAM_DETAILS', res.data.resultSets)
+        return res.data.resultSets
+      } catch (err) {}
+    },
+    async getCommonTeamRoster ({commit}, teamID) {
+      try {
+        const res = await axios.get(`https://stats.nba.com/stats/commonteamroster?LeagueID=00&Season=2017-18&TeamID=${teamID}`)
+        commit('SET_COMMON_TEAM_ROSTER', res.data.resultSets)
+        return res.data.resultSets
+      } catch (err) {}
     }
   },
   getters: {

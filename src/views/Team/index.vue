@@ -2,16 +2,16 @@
   <el-container class="team" ref="container" @scroll="handleScroll">
     <el-row type="flex" justify="center">
       <el-col :lg="18">
-        <el-header class="team__header">
-          <el-menu :default-active="activeSection" mode="horizontal" @select="changeActiveSection">
-            <el-menu-item index="info">Info</el-menu-item>
-            <el-menu-item index="team">Team</el-menu-item>
-            <el-menu-item index="ybyStats">Year by year statistics</el-menu-item>
-          </el-menu>
-        </el-header>
+        
+        <team-header :active-section="activeSection" @changeSection="name => changeActiveSection(name)" />
+
         <el-main class="team__main-container">
 
-          <team-stats-header :team-data="teamData" :this-year-stats="thisYearStats" :regular-season-stats="regularSeasonStats" @canObserve="pushOffsetData" />
+          <team-details :team-data="teamData" :this-year-stats="thisYearStats" :coach="coach" @canObserve="pushOffsetData" />
+
+          <season-stats v-if="regularSeasonStats" season="2017-18" :season-stats="regularSeasonStats" />
+
+          <franchise-leaders v-if="franchiseLeaders" :leaders="franchiseLeaders[0].rowSet[0]" />
 
           <team-players v-if="teamPlayers.length > 0" :team-players="teamPlayers" @canObserve="pushOffsetData" />
 
@@ -26,25 +26,33 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import store from '@/store/'
-import TeamStatsHeader from './components/TeamStatsHeader'
+import TeamHeader from './components/TeamHeader'
+import TeamDetails from './components/TeamDetails'
+import SeasonStats from './components/SeasonStats'
 import TeamPlayers from './components/TeamPlayers'
 import TeamStatistics from './components/TeamStatistics'
+import FranchiseLeaders from './components/FranchiseLeaders'
 
 export default {
   name: 'team',
   props: [ 'teamID' ],
-  components: { TeamStatsHeader, TeamPlayers, TeamStatistics },
+  components: { TeamHeader, TeamDetails, SeasonStats, TeamPlayers, TeamStatistics, FranchiseLeaders },
   data () {
     return {
       activeSection: "info",
       sectionOffsets: [],
-      activeStats: 'wl'
+      activeStats: 'wl',
+      labels: {
+        apg: 'Assists per game',
+        bpg: 'Blocks per game',
+        ppg: 'Points per game',
+        oppg: 'Opponent points per game',
+        spg: 'Steals per game'
+      }
     }
   },
   computed: {
-    ...mapState('teamModule', {
-      YBYStats: 'YBYStats',
-    }),
+    ...mapState('teamModule', [ 'YBYStats', 'franchiseLeaders', 'teamDetails', 'commonTeamRoster' ]),
     ...mapGetters({
       thisYearStats: 'teamModule/_getThisYearStats'
     }),
@@ -52,18 +60,33 @@ export default {
       return this.$store.getters['teamsModule/_getTeamData'](this.teamID)
     },
     regularSeasonStats () {
-      return this.$store.getters['teamsModule/_getTeamPreOrRegSeasonStats']({seasonType: 'regularSeason', teamID: this.teamID})
+      const stats = this.$store.getters['teamsModule/_getTeamPreOrRegSeasonStats']({seasonType: 'regularSeason', teamID: this.teamID})
+      const statsToShow = ['apg', 'bpg', 'ppg', 'oppg', 'spg']
+      return statsToShow.map(statName => {
+        return {
+          short: statName,
+          label: this.labels[statName],
+          value: stats[statName].avg
+        }
+      })
     },
     playoffsStats () {
       return this.$store.getters['teamsModule/_getTeamPlayoffsStats'](this.teamID)
     },
     teamPlayers () {
-      return (this.teamData) ? this.$store.getters['playersModule/_getTeamPlayers'](this.teamData.tricode) : []
+      return this.commonTeamRoster[0].rowSet
+    },
+    coach () {
+      return this.commonTeamRoster[1].rowSet[0]
     }
   },
   async beforeRouteEnter (to, from, next) {
     store.commit('SET_LOADER', true)
-    await store.dispatch('teamModule/getTeamYBYStats', {teamId: to.params.id, seasonType: 'Playoffs'})
+    const YBYStats = store.dispatch('teamModule/getTeamYBYStats', {teamId: to.params.id, seasonType: 'Regular+Season'}).then(res => res)
+    const franchiseLeaders = store.dispatch('teamModule/getFranchiseLeaders', to.params.id).then(res => res)
+    const teamDetails = store.dispatch('teamModule/getTeamDetails', to.params.id).then(res => res)
+    const teamRoster = store.dispatch('teamModule/getCommonTeamRoster', to.params.id).then(res => res)
+    await Promise.all([YBYStats, franchiseLeaders, teamDetails, teamRoster])
     next()
     store.commit('SET_LOADER', false)
   },
@@ -71,8 +94,6 @@ export default {
     ...mapActions({
       getTeams: 'teamsModule/getTeams',
       getTeamsStats: 'teamsModule/getTeamsStats',
-      getTeamYBYStats: 'teamModule/getTeamYBYStats',
-      getPlayers: 'playersModule/getPlayers'
     }),
     pushOffsetData (elData) {
       this.sectionOffsets.push({name: elData.name, offset: elData.el.offsetTop})
@@ -95,7 +116,6 @@ export default {
     window.addEventListener('scroll', this.handleScroll)
     if (!this.teamData) this.getTeams()
     if (!this.regularSeasonStats) this.getTeamsStats()
-    if (this.teamPlayers.length === 0) this.getPlayers()
   },
   destroyed () {
     window.removeEventListener('scroll', this.handleScroll)
