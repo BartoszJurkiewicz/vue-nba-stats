@@ -44,19 +44,12 @@ export default {
       return labels
     },
     datasets () {
-      let datasets = []
-      this.keys[this.activeStats].forEach(key => {
-        const r = Math.floor(Math.random() * 256)
-        const g = Math.floor(Math.random() * 256)
-        const b = Math.floor(Math.random() * 256)
-
-        const dataset = {}
-        dataset.label = this.stats.headers[key]
-        // dataset.backgroundColor = `rgba(${r}, ${g}, ${b}, .6)`
-        dataset.data = this.stats.rowSet.map(item => item[key])
-        datasets.push(dataset)
+      return this.keys[this.activeStats].map(key => {
+        return {
+          label: this.stats.headers[key],
+          data: this.stats.rowSet.map(item => item[key])
+        }
       })
-      return datasets
     }
   },
   mounted () {

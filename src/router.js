@@ -16,6 +16,12 @@ export default new Router({
       name: 'team',
       component: () => import('@/views/Team/'),
       props: route => ({teamID: route.params.id})
+    },
+    {
+      path: '/player/:id',
+      name: 'player',
+      component: () => import('@/views/Player/'),
+      props: route => ({playerID: route.params.id})
     }
   ]
 })

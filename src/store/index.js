@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import teams from './teams'
 import team from './team'
 import players from './players'
-import stats from './stats'
+import player from './player'
 
 Vue.use(Vuex)
 
@@ -21,6 +21,6 @@ export default new Vuex.Store({
     teamsModule: teams,
     teamModule: team,
     playersModule: players,
-    statsModule: stats
+    playerModule: player
   }
 })

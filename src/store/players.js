@@ -35,6 +35,7 @@ export default {
     }
   },
   getters: {
-    _getTeamPlayers: state => teamTricode => state.players.filter(player => player.teamData.tricode === teamTricode)
+    _getTeamPlayers: state => teamTricode => state.players.filter(player => player.teamData.tricode === teamTricode),
+    _getPlayerData: state => playerID => state.players.find(player => player.personId === playerID)
   }
 }

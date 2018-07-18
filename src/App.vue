@@ -13,7 +13,6 @@ export default {
     ...mapActions({
       getTeams: 'teamsModule/getTeams',
       getTeamsStats: 'teamsModule/getTeamsStats',
-      getHomeLeaders: 'statsModule/getHomeLeaders',
       getLeagueLeaders: 'playersModule/getLeagueLeaders'
     }),
     async getInitialData () {
