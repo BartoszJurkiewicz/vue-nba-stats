@@ -7,15 +7,19 @@
 
         <el-main class="team__main-container">
 
-          <team-details :team-data="teamData" :this-year-stats="thisYearStats" :coach="coach" @canObserve="pushOffsetData" />
+          <team-details :team-data="teamData" :this-year-stats="thisYearStats" :coach="coach" :team-details="teamDetails" @canObserve="pushOffsetData" />
 
           <season-stats v-if="regularSeasonStats" season="2017-18" :season-stats="regularSeasonStats" />
 
           <franchise-leaders v-if="franchiseLeaders" :leaders="franchiseLeaders[0].rowSet[0]" />
 
-          <team-players v-if="teamPlayers.length > 0" :team-players="teamPlayers" @canObserve="pushOffsetData" />
+          <achievements v-if="teamDetails" :team-details="teamDetails" />
 
-          <team-statistics :stats="YBYStats" @canObserve="pushOffsetData" />
+          <team-players v-if="teamPlayers.rowSet.length > 0" :team-players="teamPlayers.rowSet" @canObserve="pushOffsetData" />
+
+          <team-hof v-if="hof.rowSet.length > 0" :team-hof="hof" @canObserve="pushOffsetData" />
+
+          <team-statistics v-if="YBYStats" :stats="YBYStats" @canObserve="pushOffsetData" />
 
         </el-main>
       </el-col>
@@ -32,11 +36,13 @@ import SeasonStats from './components/SeasonStats'
 import TeamPlayers from './components/TeamPlayers'
 import TeamStatistics from './components/TeamStatistics'
 import FranchiseLeaders from './components/FranchiseLeaders'
+import Achievements from './components/Achievements'
+import TeamHof from './components/HOF'
 
 export default {
   name: 'team',
   props: [ 'teamID' ],
-  components: { TeamHeader, TeamDetails, SeasonStats, TeamPlayers, TeamStatistics, FranchiseLeaders },
+  components: { TeamHeader, TeamDetails, SeasonStats, TeamPlayers, TeamStatistics, FranchiseLeaders, Achievements, TeamHof },
   data () {
     return {
       activeSection: "info",
@@ -62,22 +68,29 @@ export default {
     regularSeasonStats () {
       const stats = this.$store.getters['teamsModule/_getTeamPreOrRegSeasonStats']({seasonType: 'regularSeason', teamID: this.teamID})
       const statsToShow = ['apg', 'bpg', 'ppg', 'oppg', 'spg']
-      return statsToShow.map(statName => {
-        return {
-          short: statName,
-          label: this.labels[statName],
-          value: stats[statName].avg
-        }
-      })
+      if (stats) {
+        return statsToShow.map(statName => {
+          return {
+            short: statName,
+            label: this.labels[statName],
+            value: stats[statName].avg
+          }
+        })
+      } else {
+        return []
+      }
     },
     playoffsStats () {
       return this.$store.getters['teamsModule/_getTeamPlayoffsStats'](this.teamID)
     },
     teamPlayers () {
-      return this.commonTeamRoster[0].rowSet
+      return this.commonTeamRoster.find(item => item.name === 'CommonTeamRoster')
     },
     coach () {
-      return this.commonTeamRoster[1].rowSet[0]
+      return this.commonTeamRoster.find(item => item.name === 'Coaches')
+    },
+    hof () {
+      return this.teamDetails.find(item => item.name === 'TeamHof')
     }
   },
   async beforeRouteEnter (to, from, next) {
@@ -96,6 +109,7 @@ export default {
       getTeamsStats: 'teamsModule/getTeamsStats',
     }),
     pushOffsetData (elData) {
+      console.log(elData, elData.el.offsetTop)
       this.sectionOffsets.push({name: elData.name, offset: elData.el.offsetTop})
       this.sectionOffsets = this.sectionOffsets.sort((a, b) => a.offset - b.offset).reverse()
     },

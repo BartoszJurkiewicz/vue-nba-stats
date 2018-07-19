@@ -2,7 +2,7 @@
   <section class="team__franchise-leaders">
     <el-row type="flex" justify="center">
       <el-col>
-        <h2 class="section__title text-left">Franchise leaders</h2>
+        <h2 class="section__title text-left">All time records:</h2>
       </el-col>
     </el-row>
     <el-row type="flex" justify="start" :gutter="20">
