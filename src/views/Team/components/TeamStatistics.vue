@@ -53,7 +53,9 @@ export default {
     }
   },
   mounted () {
-    this.$emit('canObserve', {el: this.$refs.ybyStats, name: 'ybyStats'})
+    this.$nextTick(() => {
+      this.$emit('canObserve', {offset: this.$refs.ybyStats.offsetTop, name: 'ybyStats'})
+    })
   }
 }
 </script>

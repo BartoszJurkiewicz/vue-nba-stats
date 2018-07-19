@@ -109,8 +109,7 @@ export default {
       getTeamsStats: 'teamsModule/getTeamsStats',
     }),
     pushOffsetData (elData) {
-      console.log(elData, elData.el.offsetTop)
-      this.sectionOffsets.push({name: elData.name, offset: elData.el.offsetTop})
+      this.sectionOffsets.push(elData)
       this.sectionOffsets = this.sectionOffsets.sort((a, b) => a.offset - b.offset).reverse()
     },
     handleScroll (e) {

@@ -86,7 +86,9 @@ export default {
     }
   },
   mounted () {
-    this.$emit('canObserve', {el: this.$refs.info, name: 'info'})
+    this.$nextTick(() => {
+      this.$emit('canObserve', {offset: this.$refs.info.offsetTop, name: 'info'})
+    })
   }
 }
 </script>

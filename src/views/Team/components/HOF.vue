@@ -22,7 +22,9 @@ export default {
   name: 'hallOfFame',
   props: [ 'teamHof' ],
   mounted () {
-    this.$emit('canObserve',  {el: this.$refs.hof, name: 'hof'})
+    this.$nextTick(() => {
+      this.$emit('canObserve',  {offset: this.$refs.hof.offsetTop, name: 'hof'})
+    })
   }
 }
 </script>

@@ -32,7 +32,9 @@ export default {
   },
   components: { List, ListItem },
   mounted () {
-    this.$emit('canObserve', {el: this.$refs.team, name: 'team'})
+    this.$nextTick(() => {
+      this.$emit('canObserve', {offset: this.$refs.team.offsetTop, name: 'team'})
+    })
   }
 }
 </script>
