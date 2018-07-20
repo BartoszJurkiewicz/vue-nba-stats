@@ -23,5 +23,8 @@ export default new Router({
       component: () => import('@/views/Player/'),
       props: route => ({playerID: route.params.id})
     }
-  ]
+  ],
+  scrollBehavior () {
+    return { x: 0, y: 0 }
+  }
 })

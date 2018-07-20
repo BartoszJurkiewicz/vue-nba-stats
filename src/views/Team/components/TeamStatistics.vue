@@ -1,5 +1,5 @@
 <template>
-  <section class="team__chart" ref="ybyStats">
+  <section class="team__chart" ref="container">
     <el-select v-model="activeStats" class="team__chart__select">
       <el-option value="wl" label="Wins/Losses"></el-option>
       <el-option value="wp" label="Wins percentage"></el-option>
@@ -17,12 +17,14 @@
 </template>
 
 <script>
+import { sectionOffset } from '../mixins/'
 import StatsChart from './StatsChart'
 
 export default {
   name: 'teamStatistics',
   props: [ 'stats' ],
   components: { StatsChart },
+  mixins: [ sectionOffset ],
   data () {
     return {
       activeStats: 'wl',
@@ -51,11 +53,6 @@ export default {
         }
       })
     }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.$emit('canObserve', {offset: this.$refs.ybyStats.offsetTop, name: 'ybyStats'})
-    })
   }
 }
 </script>

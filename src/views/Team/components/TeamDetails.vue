@@ -1,5 +1,5 @@
 <template>
-  <section class="team-header" ref="info">
+  <section class="team-header" ref="container">
     <el-row v-if="teamData">
       <img :src="`/team_logos/${teamData.tricode}.svg`" :alt="`${teamData.fullName} logo`" class="team-header__team-logo">
       <h1>{{teamData.fullName}}</h1>
@@ -65,6 +65,8 @@
 </template>
 
 <script>
+import { sectionOffset } from '../mixins/'
+
 export default {
   name: 'teamDetails',
   props: {
@@ -85,11 +87,7 @@ export default {
       required: true
     }
   },
-  mounted () {
-    this.$nextTick(() => {
-      this.$emit('canObserve', {offset: this.$refs.info.offsetTop, name: 'info'})
-    })
-  }
+  mixins: [ sectionOffset ]
 }
 </script>
 

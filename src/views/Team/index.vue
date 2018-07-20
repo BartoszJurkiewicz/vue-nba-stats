@@ -1,5 +1,5 @@
 <template>
-  <el-container class="team" ref="container" @scroll="handleScroll">
+  <el-container class="team" @scroll="handleScroll">
     <el-row type="flex" justify="center">
       <el-col :lg="18">
         
@@ -7,7 +7,7 @@
 
         <el-main class="team__main-container">
 
-          <team-details :team-data="teamData" :this-year-stats="thisYearStats" :coach="coach" :team-details="teamDetails" @canObserve="pushOffsetData" />
+          <team-details ref="detailsContainer" :team-data="teamData" :this-year-stats="thisYearStats" :coach="coach" :team-details="teamDetails" />
 
           <season-stats v-if="regularSeasonStats" season="2017-18" :season-stats="regularSeasonStats" />
 
@@ -15,11 +15,11 @@
 
           <achievements v-if="teamDetails" :team-details="teamDetails" />
 
-          <team-players v-if="teamPlayers.rowSet.length > 0" :team-players="teamPlayers.rowSet" @canObserve="pushOffsetData" />
+          <team-players ref="teamContainer" v-if="teamPlayers.length > 0" :team-players="teamPlayers" />
 
-          <team-hof v-if="hof.rowSet.length > 0" :team-hof="hof" @canObserve="pushOffsetData" />
+          <team-hof ref="hofContainer" v-if="hof.rowSet.length > 0" :team-hof="hof" />
 
-          <team-statistics v-if="YBYStats" :stats="YBYStats" @canObserve="pushOffsetData" />
+          <team-statistics ref="statsContainer" v-if="YBYStats" :stats="YBYStats" />
 
         </el-main>
       </el-col>
@@ -45,8 +45,9 @@ export default {
   components: { TeamHeader, TeamDetails, SeasonStats, TeamPlayers, TeamStatistics, FranchiseLeaders, Achievements, TeamHof },
   data () {
     return {
-      activeSection: "info",
-      sectionOffsets: [],
+      activeSection: "detailsContainer",
+      hasToSetSectionsOffset: true,
+      // sectionsOffsets: [],
       activeStats: 'wl',
       labels: {
         apg: 'Assists per game',
@@ -84,13 +85,21 @@ export default {
       return this.$store.getters['teamsModule/_getTeamPlayoffsStats'](this.teamID)
     },
     teamPlayers () {
-      return this.commonTeamRoster.find(item => item.name === 'CommonTeamRoster')
+      const teamBackground = this.teamDetails.find(item => item.name === 'TeamBackground')
+      return this.$store.getters['playersModule/_getTeamPlayers'](teamBackground.rowSet[0][1])
     },
     coach () {
       return this.commonTeamRoster.find(item => item.name === 'Coaches')
     },
     hof () {
       return this.teamDetails.find(item => item.name === 'TeamHof')
+    },
+    sectionsOffsets () {
+      return Object.keys(this.$refs)
+      .filter(sectionName => sectionName.includes('Container'))
+      .map(sectionName => { return {sectionName: sectionName, offset: this.$refs[sectionName].sectionOffset} })
+      .sort((a, b) => a.offset - b.offset)
+      .reverse()
     }
   },
   async beforeRouteEnter (to, from, next) {
@@ -108,19 +117,15 @@ export default {
       getTeams: 'teamsModule/getTeams',
       getTeamsStats: 'teamsModule/getTeamsStats',
     }),
-    pushOffsetData (elData) {
-      this.sectionOffsets.push(elData)
-      this.sectionOffsets = this.sectionOffsets.sort((a, b) => a.offset - b.offset).reverse()
-    },
     handleScroll (e) {
-      const activeSection = this.sectionOffsets.find(el => el.offset <= window.pageYOffset + 300)
-      this.activeSection = activeSection.name
+      const activeSection = this.sectionsOffsets.find(el => el.offset <= window.pageYOffset + 100)
+      this.activeSection = activeSection.sectionName
     },
     changeActiveSection (sectionName) {
       this.activeSection = sectionName
-      const section = this.sectionOffsets.find(el => el.name === sectionName)
+      const section = this.$refs[sectionName].$el
       window.scroll({
-        top: section.offset - 80,
+        top: section.offsetTop - 80,
         behavior: 'smooth'
       })
     }

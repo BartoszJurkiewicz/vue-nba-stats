@@ -1,5 +1,5 @@
 <template>
-  <section class="team__hall-of-fame" ref="hof">
+  <section class="team__hall-of-fame" ref="container">
     <el-row type="flex" justify="center">
       <el-col>
         <h2 class="section__title text-left">Hall of fame:</h2>
@@ -18,14 +18,12 @@
 </template>
 
 <script>
+import { sectionOffset } from '../mixins/'
+
 export default {
   name: 'hallOfFame',
   props: [ 'teamHof' ],
-  mounted () {
-    this.$nextTick(() => {
-      this.$emit('canObserve',  {offset: this.$refs.hof.offsetTop, name: 'hof'})
-    })
-  }
+  mixins: [ sectionOffset ]
 }
 </script>
 
