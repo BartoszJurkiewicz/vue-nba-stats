@@ -59,6 +59,10 @@ ul {
 img {
   max-width: 100%
 }
+.el-row {
+  flex: 1;
+  max-width: 100%;
+}
 .el-card {
   height: 100%;
 }
@@ -74,5 +78,11 @@ img {
 .section__title {
   padding-bottom: 1rem;
   border-bottom: 1px solid lightgray;
+}
+.stats-table {
+  .cell {
+    font-size: .8rem;
+    text-align: center;
+  }
 }
 </style>

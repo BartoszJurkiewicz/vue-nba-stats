@@ -7,7 +7,7 @@
     </el-row>
     <el-row>
       <el-col>
-        <el-table :data="teamHof.rowSet" class="hall-of-fame__table">
+        <el-table :data="teamHof.rowSet" class="hall-of-fame__table stats-table">
           <el-table-column prop="1" label="Player" sortable />
           <el-table-column prop="2" label="Position" sortable />
           <el-table-column prop="4" label="Seasons with team" sortable />

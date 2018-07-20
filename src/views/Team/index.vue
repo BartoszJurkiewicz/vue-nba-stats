@@ -9,7 +9,7 @@
 
           <team-details ref="detailsContainer" :team-data="teamData" :this-year-stats="thisYearStats" :coach="coach" :team-details="teamDetails" />
 
-          <season-stats v-if="regularSeasonStats" season="2017-18" :season-stats="regularSeasonStats" />
+          <season-stats v-if="regularSeasonStats" :season-stats="regularSeasonStats" />
 
           <franchise-leaders v-if="franchiseLeaders" :leaders="franchiseLeaders[0].rowSet[0]" />
 
@@ -102,16 +102,6 @@ export default {
       .reverse()
     }
   },
-  async beforeRouteEnter (to, from, next) {
-    store.commit('SET_LOADER', true)
-    const YBYStats = store.dispatch('teamModule/getTeamYBYStats', {teamId: to.params.id, seasonType: 'Regular+Season'}).then(res => res)
-    const franchiseLeaders = store.dispatch('teamModule/getFranchiseLeaders', to.params.id).then(res => res)
-    const teamDetails = store.dispatch('teamModule/getTeamDetails', to.params.id).then(res => res)
-    const teamRoster = store.dispatch('teamModule/getCommonTeamRoster', to.params.id).then(res => res)
-    await Promise.all([YBYStats, franchiseLeaders, teamDetails, teamRoster])
-    next()
-    store.commit('SET_LOADER', false)
-  },
   methods: {
     ...mapActions({
       getPlayers: 'playersModule/getPlayers',
@@ -130,6 +120,16 @@ export default {
         behavior: 'smooth'
       })
     }
+  },
+  async beforeRouteEnter (to, from, next) {
+    store.commit('SET_LOADER', true)
+    const YBYStats = store.dispatch('teamModule/getTeamYBYStats', {teamId: to.params.id, seasonType: 'Regular+Season'}).then(res => res)
+    const franchiseLeaders = store.dispatch('teamModule/getFranchiseLeaders', to.params.id).then(res => res)
+    const teamDetails = store.dispatch('teamModule/getTeamDetails', to.params.id).then(res => res)
+    const teamRoster = store.dispatch('teamModule/getCommonTeamRoster', to.params.id).then(res => res)
+    await Promise.all([YBYStats, franchiseLeaders, teamDetails, teamRoster])
+    next()
+    store.commit('SET_LOADER', false)
   },
   created () {
     window.addEventListener('scroll', this.handleScroll)

@@ -17,8 +17,12 @@
         <p>{{playerData.heightFeet}}'{{playerData.heightInches}} | {{playerData.weightPounds}}lbs</p>
         
         <!-- TODO - Players listing view / filtered by position -->
-        
-        <p>{{playerData.posExpanded}}</p>
+
+        <p>
+          <router-link to="/">
+            {{playerData.posExpanded}}
+          </router-link>
+        </p>
       </template>
       <router-link v-if="teamData" :to="`/team/${teamData.teamId}`">{{teamData.fullName}}</router-link>
     </el-row>
