@@ -118,7 +118,7 @@ export default {
       getTeamsStats: 'teamsModule/getTeamsStats',
     }),
     handleScroll (e) {
-      const activeSection = this.sectionsOffsets.find(el => el.offset <= window.pageYOffset + 100)
+      const activeSection = this.sectionsOffsets.find(el => el.offset <= window.pageYOffset + 140)
       this.activeSection = activeSection.sectionName
     },
     changeActiveSection (sectionName) {
