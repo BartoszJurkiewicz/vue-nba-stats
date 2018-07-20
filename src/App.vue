@@ -14,14 +14,11 @@ export default {
       getPlayers: 'playersModule/getPlayers',
       getTeams: 'teamsModule/getTeams',
       getTeamsStats: 'teamsModule/getTeamsStats',
-      getLeagueLeaders: 'playersModule/getLeagueLeaders'
     }),
     async getInitialData () {
-      const players = this.getPlayers().then(res => res)
       const teams = this.getTeams().then(res => res)
       const teamsStats = this.getTeamsStats().then(res => res)
-      const leagueLeaders = this.getLeagueLeaders().then(res => res)
-      await Promise.all([players, teams, teamsStats, leagueLeaders])
+      await Promise.all([teams, teamsStats])
       this.$store.commit('SET_LOADER', false)
     }
   },

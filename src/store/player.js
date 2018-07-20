@@ -14,9 +14,9 @@ export default {
     }
   },
   actions: {
-    async getYBYStats ({commit}, playerID) {
+    async getYBYStats ({commit, rootState}, reqData) {
       try {
-        const res = await axios.get(`https://stats.nba.com/stats/playerdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode=PerGame&Period=0&PlayerID=${playerID}&PlusMinus=N&Rank=N&Season=2017-18&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&Split=yoy&VsConference=&VsDivision=`)
+        const res = await axios.get(`https://stats.nba.com/stats/playerdashboardbyyearoveryear?DateFrom=${reqData.from}&DateTo=${reqData.to}&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Advanced&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode=PerGame&Period=0&PlayerID=${reqData.playerID}&PlusMinus=N&Rank=N&Season=${rootState.season}&SeasonSegment=&SeasonType=${reqData.seasonType}&ShotClockRange=&Split=yoy&VsConference=&VsDivision=`)
         commit('SET_YBY_STATS', res.data.resultSets)
         return res.data.resultSets
       } catch (err) {

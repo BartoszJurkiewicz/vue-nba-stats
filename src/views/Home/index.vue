@@ -65,6 +65,14 @@ export default {
     filteredTeams () {
       return this.allTeams.filter(team => team.confName === this.conference)
     }
+  },
+  methods: {
+    ...mapActions({
+      getLeagueLeaders: 'playersModule/getLeagueLeaders'
+    })
+  },
+  created () {
+    this.getLeagueLeaders()
   }
 }
 </script>

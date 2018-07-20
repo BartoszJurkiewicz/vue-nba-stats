@@ -32,7 +32,7 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import store from '@/store/'
 import TeamHeader from './components/TeamHeader'
 import TeamDetails from './components/TeamDetails'
-import SeasonStats from './components/SeasonStats'
+import SeasonStats from '@/components/SeasonStats'
 import TeamPlayers from './components/TeamPlayers'
 import TeamStatistics from './components/TeamStatistics'
 import FranchiseLeaders from './components/FranchiseLeaders'
@@ -64,7 +64,7 @@ export default {
       thisYearStats: 'teamModule/_getThisYearStats'
     }),
     teamData () {
-      return this.$store.getters['teamsModule/_getTeamData'](this.teamID)
+      return this.$store.getters['teamsModule/_getTeamData']({fieldName: 'teamId', fieldValue: this.teamID})
     },
     regularSeasonStats () {
       const stats = this.$store.getters['teamsModule/_getTeamPreOrRegSeasonStats']({seasonType: 'regularSeason', teamID: this.teamID})
@@ -114,6 +114,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      getPlayers: 'playersModule/getPlayers',
       getTeams: 'teamsModule/getTeams',
       getTeamsStats: 'teamsModule/getTeamsStats',
     }),
@@ -132,6 +133,7 @@ export default {
   },
   created () {
     window.addEventListener('scroll', this.handleScroll)
+    if (this.teamPlayers.length < 1) this.getPlayers()
     if (!this.teamData) this.getTeams()
     if (!this.regularSeasonStats) this.getTeamsStats()
   },

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import moment from 'moment'
 
 import teams from './teams'
 import team from './team'
@@ -10,7 +11,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    isLoading: true
+    isLoading: true,
+    season: `${moment().subtract(1, 'years').format('YYYY')}-${moment().format('YY')}`
   },
   mutations: {
     SET_LOADER: (state, bool) => {
