@@ -22,6 +22,12 @@ export default new Router({
       name: 'player',
       component: () => import('@/views/Player/'),
       props: route => ({playerID: route.params.id})
+    },
+    {
+      path: '/players/',
+      name: 'playersList',
+      component: () => import('@/views/PlayersList/'),
+      props: route => ({filterData: route.query})
     }
   ],
   scrollBehavior () {

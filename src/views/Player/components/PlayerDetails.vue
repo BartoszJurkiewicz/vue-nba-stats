@@ -8,7 +8,7 @@
 
             <!-- TODO - Players listing view / filtered by isAllstar -->
 
-            <router-link to="/">
+            <router-link to="/players/allstars">
               <el-button icon="el-icon-star-on" circle></el-button>
             </router-link>
           </el-tooltip>

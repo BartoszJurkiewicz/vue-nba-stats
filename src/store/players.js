@@ -36,6 +36,16 @@ export default {
   },
   getters: {
     _getTeamPlayers: state => teamTricode => state.players.filter(player => player.teamData.tricode === teamTricode),
-    _getPlayerData: state => playerID => state.players.find(player => player.personId === playerID)
+    _getPlayerData: state => playerID => state.players.find(player => player.personId === playerID),
+    _getFilteredPlayers: state => filters => {
+      console.log(filters)
+      // return Object.keys(filters).map(filterKey => {
+        // console.log(filterKey, filters[filterKey])
+        return state.players.filter(player => {
+          // console.log(player, player[filterKey])
+          return player.isAllStar === true
+        })
+      // })
+    }
   }
 }
